@@ -15,7 +15,7 @@ func ErrUnknown(name string) CmdErr {
 	return CmdErr("unknown help topic: " + name)
 }
 
-func Help(cfg Config) error {
+func Help(cfg *Config) error {
 	cmds := Cmds()
 
 	if len(cfg.Args) == 0 {

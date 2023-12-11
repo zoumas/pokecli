@@ -1,19 +1,10 @@
 package cmd
 
-import "io"
-
-// Config is a command's configuration.
-// It contains its arguments and any additional data a command may need.
-type Config struct {
-	W    io.Writer
-	Args []string
-}
-
 // Cmd represents a REPL command.
 type Cmd struct {
 	Name        string
 	Description string
-	Callback    func(Config) error
+	Callback    func(*Config) error
 }
 
 // Cmds returns a map of all the available commands.
@@ -28,6 +19,16 @@ func Cmds() map[string]Cmd {
 			Name:        "exit",
 			Description: "Exit pokecli",
 			Callback:    Exit,
+		},
+		"map": {
+			Name:        "map",
+			Description: "Explore the next 20 areas in the Pokemon world",
+			Callback:    Map,
+		},
+		"mapb": {
+			Name:        "mapb",
+			Description: "Explore the previous 20 areas in the Pokemon world",
+			Callback:    Mapb,
 		},
 	}
 }
