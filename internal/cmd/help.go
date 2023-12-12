@@ -1,8 +1,10 @@
 package cmd
 
 import (
+	"cmp"
 	"fmt"
 	"io"
+	"slices"
 )
 
 type CmdErr string
@@ -35,10 +37,17 @@ func Help(cfg *Config) error {
 }
 
 func helpMenu(w io.Writer, cmds map[string]Cmd) {
-	fmt.Fprint(w, "\nCommands:\n\n")
+	fmt.Fprintln(w, "Commands:")
 
+	sortedCommands := []Cmd{}
 	for _, c := range cmds {
-		fmt.Fprintf(w, "%s - %-4s\n", c.Name, c.Description)
+		sortedCommands = append(sortedCommands, c)
 	}
-	fmt.Fprintln(w)
+	slices.SortStableFunc(sortedCommands, func(a, b Cmd) int {
+		return cmp.Compare(a.Name, b.Name)
+	})
+
+	for _, c := range sortedCommands {
+		fmt.Fprintf(w, "\n%s\n %s\n", c.Name, c.Description)
+	}
 }
