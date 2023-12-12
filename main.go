@@ -17,7 +17,7 @@ func main() {
 			"pokecli > ",
 			os.Stdin,
 			os.Stdout,
-			pokeapi.NewClient(&http.Client{Timeout: 30 * time.Second}),
+			pokeapi.NewClient(&http.Client{Timeout: 30 * time.Second}, time.Minute),
 			cmd.Cmds(),
 		),
 	)

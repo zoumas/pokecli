@@ -1,28 +1,29 @@
 package cache
 
 import (
-	"log"
 	"sync"
 	"time"
 )
 
 type entry struct {
 	createdAt time.Time
-	data      []byte
+	payload   []byte
 }
 
 type Cache struct {
-	m  map[string]entry
-	mu *sync.RWMutex
+	m            map[string]entry
+	mu           *sync.RWMutex
+	reapInterval time.Duration
 }
 
-func NewCache(interval time.Duration) *Cache {
+func NewCache(reapInterval time.Duration) *Cache {
 	c := &Cache{
-		m:  make(map[string]entry),
-		mu: &sync.RWMutex{},
+		m:            make(map[string]entry),
+		reapInterval: reapInterval,
+		mu:           &sync.RWMutex{},
 	}
 
-	go c.reapLoop(interval)
+	go c.reapLoop()
 
 	return c
 }
@@ -33,7 +34,7 @@ func (c *Cache) Add(key string, value []byte) {
 
 	c.m[key] = entry{
 		createdAt: time.Now(),
-		data:      value,
+		payload:   value,
 	}
 }
 
@@ -42,19 +43,22 @@ func (c *Cache) Get(key string) ([]byte, bool) {
 	defer c.mu.RUnlock()
 
 	v, ok := c.m[key]
-	return v.data, ok
+	return v.payload, ok
 }
 
-func (c *Cache) reapLoop(interval time.Duration) {
-	t := time.Tick(interval)
-	for range t {
-		c.mu.Lock()
-		for k, v := range c.m {
-			if time.Since(v.createdAt) > interval {
-				log.Println("Reaped", k)
-				delete(c.m, k)
-			}
+func (c *Cache) reapLoop() {
+	for range time.Tick(c.reapInterval) {
+		c.reap()
+	}
+}
+
+func (c *Cache) reap() {
+	c.mu.Lock()
+	defer c.mu.Unlock()
+
+	for k, v := range c.m {
+		if time.Since(v.createdAt) > c.reapInterval {
+			delete(c.m, k)
 		}
-		c.mu.Unlock()
 	}
 }
