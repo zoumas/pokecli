@@ -14,7 +14,7 @@ type Config struct {
 	w       io.Writer
 	client  *pokeapi.Client
 	cmds    map[string]cmd.Cmd
-	history []cmd.Cmd
+	history []string
 }
 
 // NewConfig constructs a configuration for the REPL
@@ -31,6 +31,6 @@ func NewConfig(
 		w:       w,
 		client:  client,
 		cmds:    cmds,
-		history: make([]cmd.Cmd, 0, 500),
+		history: make([]string, 0, 500),
 	}
 }
