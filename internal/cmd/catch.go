@@ -29,17 +29,5 @@ func Catch(cfg *Config) error {
 	fmt.Fprintf(cfg.W, "%s was caught!\n", name)
 	cfg.Client.AddToPokedex(name, pokemon)
 
-	Pokedex(cfg)
-
-	return nil
-}
-
-func Pokedex(cfg *Config) error {
-	fmt.Fprintln(cfg.W, "\nPokedex:")
-
-	for name := range cfg.Client.Pokedex {
-		fmt.Fprintf(cfg.W, "- %s\n", name)
-	}
-
 	return nil
 }
