@@ -7,7 +7,7 @@ import (
 	"github.com/zoumas/pokecli/internal/cache"
 )
 
-const LocationAreaEndpoint = "https://pokeapi.co/api/v2/location-area?offset=0&limit=20"
+const LocationAreaEndpoint = "https://pokeapi.co/api/v2/location-area/"
 
 type Client struct {
 	httpClient     *http.Client

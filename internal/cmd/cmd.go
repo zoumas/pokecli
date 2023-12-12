@@ -30,5 +30,10 @@ func Cmds() map[string]Cmd {
 			Description: "Explore the previous 20 areas in the Pokemon world",
 			Callback:    Mapb,
 		},
+		"explore": {
+			Name:        "explore {area}",
+			Description: "Get a list of possible pokemon encounters for the provided area",
+			Callback:    Explore,
+		},
 	}
 }
