@@ -32,8 +32,13 @@ func Cmds() map[string]Cmd {
 		},
 		"explore": {
 			Name:        "explore {area}",
-			Description: "Get a list of possible pokemon encounters for the provided area",
+			Description: "Get a list of possible Pokemon encounters for the provided area",
 			Callback:    Explore,
+		},
+		"catch": {
+			Name:        "catch {pokemon}",
+			Description: "Try to catch the named Pokemon and add it to your Pokedex",
+			Callback:    Catch,
 		},
 	}
 }
