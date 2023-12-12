@@ -13,11 +13,13 @@ type Client struct {
 	httpClient     *http.Client
 	cache          *cache.Cache
 	Next, Previous *string
+	Pokedex        map[string]*PokemonResponse
 }
 
 func NewClient(c *http.Client, cacheReapInterval time.Duration) *Client {
 	return &Client{
 		httpClient: c,
 		cache:      cache.NewCache(cacheReapInterval),
+		Pokedex:    make(map[string]*PokemonResponse),
 	}
 }
