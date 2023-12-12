@@ -27,10 +27,18 @@ func Start(cfg *Config) {
 		name := input[0]
 		args := input[1:]
 
-		c, ok := cfg.cmds[name]
-		if !ok {
-			handleUnknownCommand(cfg.w, name)
-			continue
+		var c cmd.Cmd
+
+		if name == "!!" {
+			top := len(cfg.history) - 1
+			c = cfg.history[top]
+		} else {
+			var ok bool
+			c, ok = cfg.cmds[name]
+			if !ok {
+				handleUnknownCommand(cfg.w, name)
+				continue
+			}
 		}
 
 		if err := c.Callback(&cmd.Config{
@@ -40,6 +48,7 @@ func Start(cfg *Config) {
 		}); err != nil {
 			fmt.Fprintln(cfg.w, err)
 		}
+		cfg.history = append(cfg.history, c)
 	}
 }
 

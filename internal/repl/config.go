@@ -9,11 +9,12 @@ import (
 
 // Config stores any data the REPL may need in order to operate.
 type Config struct {
-	prompt string
-	r      io.Reader
-	w      io.Writer
-	client *pokeapi.Client
-	cmds   map[string]cmd.Cmd
+	prompt  string
+	r       io.Reader
+	w       io.Writer
+	client  *pokeapi.Client
+	cmds    map[string]cmd.Cmd
+	history []cmd.Cmd
 }
 
 // NewConfig constructs a configuration for the REPL
@@ -25,10 +26,11 @@ func NewConfig(
 	cmds map[string]cmd.Cmd,
 ) *Config {
 	return &Config{
-		prompt: prompt,
-		r:      r,
-		w:      w,
-		client: client,
-		cmds:   cmds,
+		prompt:  prompt,
+		r:       r,
+		w:       w,
+		client:  client,
+		cmds:    cmds,
+		history: make([]cmd.Cmd, 0, 500),
 	}
 }
